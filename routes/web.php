@@ -25,10 +25,6 @@ use App\Http\Controllers\InicioController;
 // Una ruta = una regla que dice: "si alguien pide ESTA dirección, haz ESTO".
 use Illuminate\Support\Facades\Route;
 
-// NUEVO: el controlador que se encarga de las sedes
-// (listar, crear, editar y borrar sedes). Está en app/Http/Controllers/SedesController.php.
-use App\Http\Controllers\SedesController;
-
 
 // ─────────────────────────────────────────────────────────────
 // RUTA DE LA PORTADA: qué pasa al entrar en la dirección principal "/"
@@ -119,30 +115,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/configuracion/password', [ConfiguracionController::class, 'actualizarContrasena'])->name('settings.password.update');
 
 
-    // ─────────────────────────────────────────────────────────
-    // NUEVO: RUTAS DE SEDES (el CRUD: crear, ver, modificar y borrar sedes)
-    // Están dentro de este grupo, así que solo se puede entrar con la sesión iniciada.
-    // Las direcciones van en castellano (/crear, /editar), como pide la guía del profesor.
-    // {sede} es un hueco que se rellena con el id de la sede: /sedes/3/editar.
-    // Laravel busca sola la sede con ese id y se la pasa al controlador.
-    // ─────────────────────────────────────────────────────────
-
-    // VER el listado de todas las sedes (método index).
-    Route::get('/sedes', [SedesController::class, 'index'])->name('sedes.index');
-
-    // VER el formulario vacío para crear una sede nueva (método create).
-    Route::get('/sedes/crear', [SedesController::class, 'create'])->name('sedes.create');
-
-    // GUARDAR la sede nueva cuando se envía ese formulario (POST, método store).
-    Route::post('/sedes', [SedesController::class, 'store'])->name('sedes.store');
-
-    // VER el formulario para editar una sede concreta, ya relleno con sus datos (método edit).
-    Route::get('/sedes/{sede}/editar', [SedesController::class, 'edit'])->name('sedes.edit');
-
-    // GUARDAR los cambios de esa sede (PUT = modificar, método update).
-    Route::put('/sedes/{sede}', [SedesController::class, 'update'])->name('sedes.update');
-
-    // BORRAR esa sede (DELETE = eliminar, método destroy).
-    Route::delete('/sedes/{sede}', [SedesController::class, 'destroy'])->name('sedes.destroy');
+    
 
 }); // Aquí se cierra el grupo de rutas privadas. 
