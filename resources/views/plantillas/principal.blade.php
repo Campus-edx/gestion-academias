@@ -40,7 +40,6 @@
                 </div>
             </div>
 
-                        {{-- Enlaces del menú: Inicio, Configuración y Sedes (se marca en color el de la página actual) --}}
             <div class="nav-label">Principal</div>
             <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                 <span class="nav-icon">⌂</span> Inicio
@@ -50,12 +49,7 @@
                 href="{{ route('settings.profile') }}">
                 <span class="nav-icon">⚙</span> Configuración
             </a>
-
-            {{-- NUEVO: enlace al listado de sedes. 'sedes.*' lo marca en todas sus pantallas (listado, crear, editar) --}}
-            <a class="nav-link {{ request()->routeIs('sedes.*') ? 'active' : '' }}" href="{{ route('sedes.index') }}">
-                <span class="nav-icon">▣</span> Sedes
-            </a>
-
+            
             {{-- Parte de abajo del menú: datos del usuario conectado y botón de cerrar sesión --}}
             <div class="sidebar-bottom">
                 {{-- Nombre y correo del usuario --}}
