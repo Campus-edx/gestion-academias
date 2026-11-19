@@ -50,6 +50,15 @@
                 href="{{ route('settings.profile') }}">
                 <span class="nav-icon">⚙</span> Configuración
             </a>
+            
+            {{-- NUEVO: sección de Alumnos y tutores del menú. --}}
+            <div class="nav-label">Alumnos y tutores</div>
+            {{-- Enlace al listado de alumnos. 'alumnos.*' lo marca en todas
+            sus pantallas. --}}
+            <a class="nav-link {{ request()->routeIs('alumnos.*') ? 'active'
+            : '' }}" href="{{ route('alumnos.index') }}">
+            <span class="nav-icon">☺</span> Alumnos
+            </a>
 
             
 

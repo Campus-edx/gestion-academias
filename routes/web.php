@@ -21,9 +21,13 @@ use App\Http\Controllers\ConfiguracionController;
 // El controlador que se encarga de la pantalla de inicio (el panel principal).
 use App\Http\Controllers\InicioController;
 
+// El controlador que se encarga de los alumnos (listar, dar de alta y modificar).
+use App\Http\Controllers\AlumnosController;
+
 // "Route" es una herramienta que trae Laravel para crear rutas.
 // Una ruta = una regla que dice: "si alguien pide ESTA dirección, haz ESTO".
 use Illuminate\Support\Facades\Route;
+
 
 
 // ─────────────────────────────────────────────────────────────
@@ -114,7 +118,25 @@ Route::middleware('auth')->group(function () {
     // "actualizarContrasena" comprueba la contraseña actual antes de guardar la nueva.
     Route::put('/configuracion/password', [ConfiguracionController::class, 'actualizarContrasena'])->name('settings.password.update');
 
-
-    
+    // ─────────────────────────────────────────────────────────
+    // RUTAS DE ALUMNOS (SCRUM-198, 204 y 224)
+    // No hay ruta para borrar: un alumno se da de baja desmarcando "Activo".
+    // {alumno} se rellena con el id: /alumnos/3/editar. Laravel busca solo ese alumno.
+    // ─────────────────────────────────────────────────────────
+    // VER el listado de alumnos (con buscador).
+    Route::get('/alumnos', [AlumnosController::class, 'index'])
+    ->name('alumnos.index');
+    // VER el formulario vacío para dar de alta un alumno.
+    Route::get('/alumnos/crear', [AlumnosController::class, 'create'])
+    ->name('alumnos.create');
+    // GUARDAR el alumno nuevo (POST = enviar datos nuevos).
+    Route::post('/alumnos', [AlumnosController::class, 'store'])
+    ->name('alumnos.store');
+    // VER la ficha de un alumno para modificarla.
+    Route::get('/alumnos/{alumno}/editar', [AlumnosController::class,
+    'edit'])->name('alumnos.edit');
+    // GUARDAR los cambios de ese alumno (PUT = modificar).
+    Route::put('/alumnos/{alumno}', [AlumnosController::class, 'update'])
+    ->name('alumnos.update');
 
 }); // Aquí se cierra el grupo de rutas privadas. 
