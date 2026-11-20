@@ -24,6 +24,12 @@ use App\Http\Controllers\InicioController;
 // El controlador que se encarga de los alumnos (listar, dar de alta y modificar).
 use App\Http\Controllers\AlumnosController;
 
+// Los controladores de profesores: la ficha, sus vinculaciones con empresas
+// y su disponibilidad.
+use App\Http\Controllers\DisponibilidadProfesoresController;
+use App\Http\Controllers\ProfesoresController;
+use App\Http\Controllers\VinculacionesProfesoresController;
+
 // "Route" es una herramienta que trae Laravel para crear rutas.
 // Una ruta = una regla que dice: "si alguien pide ESTA dirección, haz ESTO".
 use Illuminate\Support\Facades\Route;
@@ -138,5 +144,31 @@ Route::middleware('auth')->group(function () {
     // GUARDAR los cambios de ese alumno (PUT = modificar).
     Route::put('/alumnos/{alumno}', [AlumnosController::class, 'update'])
     ->name('alumnos.update');
+
+    // RUTAS DE PROFESORES (SCRUM-228, 233, 237, 242, 246 y 250)
+    Route::get('/profesores', [ProfesoresController::class, 'index'])
+    ->name('profesores.index');
+    Route::get('/profesores/crear', [ProfesoresController::class, 'create'])
+    ->name('profesores.create');
+    Route::post('/profesores', [ProfesoresController::class, 'store'])
+    ->name('profesores.store');
+    Route::get('/profesores/{profesor}/editar', [ProfesoresController::class,
+    'edit'])->name('profesores.edit');
+    Route::put('/profesores/{profesor}', [ProfesoresController::class,
+    'update'])->name('profesores.update');
+    // Vinculaciones con empresas: añadir una y cerrarla.
+    Route::post('/profesores/{profesor}/vinculaciones',
+    [VinculacionesProfesoresController::class, 'store'])
+    ->name('profesores.vinculaciones.store');
+    Route::put('/profesores/{profesor}/vinculaciones/{vinculacion}/cerrar',
+    [VinculacionesProfesoresController::class, 'cerrar'])
+    ->name('profesores.vinculaciones.cerrar');
+    // Disponibilidad horaria: añadir una franja y quitarla.
+    Route::post('/profesores/{profesor}/disponibilidad',
+    [DisponibilidadProfesoresController::class, 'store'])
+    ->name('profesores.disponibilidad.store');
+    Route::delete('/profesores/{profesor}/disponibilidad/{disponibilidad}',
+    [DisponibilidadProfesoresController::class, 'destroy'])
+    ->name('profesores.disponibilidad.destroy');
 
 }); // Aquí se cierra el grupo de rutas privadas. 
