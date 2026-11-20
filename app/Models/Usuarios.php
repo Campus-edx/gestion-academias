@@ -5,6 +5,7 @@ namespace App\Models;
 
 // Piezas de Laravel que usa este modelo.
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -55,5 +56,11 @@ class Usuarios extends Authenticatable
     public function empresa(): BelongsTo
     {
         return $this->belongsTo(Empresas::class, 'empresa_id');
+    }
+
+    public function roles(): HasMany
+    { 
+        return $this->hasMany(UsuarioRol::class, 'usuario_id');
+        
     }
 }
