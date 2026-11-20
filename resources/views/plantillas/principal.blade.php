@@ -60,6 +60,14 @@
             <span class="nav-icon">☺</span> Alumnos
             </a>
 
+            {{-- NUEVO: sección de Profesorado del menú. --}}
+            <div class="nav-label">Profesorado</div>
+                <a class="nav-link {{ request()->routeIs('profesores.*') ?
+                'active' : '' }}" href="{{ route('profesores.index') }}">
+                <span class="nav-icon">✎</span> Profesores
+                </a>
+
+
             
 
             {{-- Parte de abajo del menú: datos del usuario conectado y botón de cerrar sesión --}}

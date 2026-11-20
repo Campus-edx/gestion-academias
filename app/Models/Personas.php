@@ -38,4 +38,11 @@ public function nombreCompleto(): string
 {
 return trim($this->nombre . ' ' . $this->apellidos);
 }
+// Relación: una persona puede ser profesor (como mucho una vez).
+// Permite escribir $persona->profesor (o null si no lo es).
+public function profesor(): HasOne
+{
+return $this->hasOne(Profesores::class, 'persona_id');
+}
+
 }
