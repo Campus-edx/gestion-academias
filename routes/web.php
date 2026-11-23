@@ -1,8 +1,8 @@
 <?php
+
 // Esta línea indica que todo lo que viene a continuación es código PHP.
 // Este archivo es routes/web.php: la "centralita" de la aplicación.
 // Aquí se decide qué pasa cuando alguien escribe una dirección (URL) en el navegador.
-
 
 // ─────────────────────────────────────────────────────────────
 // "use" sirve para avisar de qué otras piezas del proyecto vamos a usar.
@@ -14,13 +14,10 @@
 // El controlador que se encarga de entrar y salir de la aplicación (login y logout).
 // Está en la carpeta app/Http/Controllers/Acceso/.
 use App\Http\Controllers\Acceso\AccesoController;
-
 // El controlador que se encarga de la pantalla de configuración del usuario.
 use App\Http\Controllers\ConfiguracionController;
-
 // El controlador que se encarga de la pantalla de inicio (el panel principal).
 use App\Http\Controllers\InicioController;
-
 // El controlador que se encarga de los alumnos (listar, dar de alta y modificar).
 use App\Http\Controllers\AlumnosController;
 
@@ -29,12 +26,11 @@ use App\Http\Controllers\AlumnosController;
 use App\Http\Controllers\DisponibilidadProfesoresController;
 use App\Http\Controllers\ProfesoresController;
 use App\Http\Controllers\VinculacionesProfesoresController;
-
 // "Route" es una herramienta que trae Laravel para crear rutas.
 // Una ruta = una regla que dice: "si alguien pide ESTA dirección, haz ESTO".
+use App\Http\Controllers\UsuarioRolController;
+use App\Http\Controllers\UsuariosController;
 use Illuminate\Support\Facades\Route;
-
-
 
 // ─────────────────────────────────────────────────────────────
 // RUTA DE LA PORTADA: qué pasa al entrar en la dirección principal "/"
@@ -56,8 +52,7 @@ Route::get('/', fn () => auth()->check()
 
     // El signo ":" significa: "y si la respuesta es NO, haz esto otro":
     : redirect()->route('login'));
-    // → Si NO ha iniciado sesión: la mandamos a la pantalla de login.
-
+// → Si NO ha iniciado sesión: la mandamos a la pantalla de login.
 
 // ─────────────────────────────────────────────────────────────
 // GRUPO DE RUTAS PARA "INVITADOS" (gente que NO ha iniciado sesión)
@@ -86,7 +81,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AccesoController::class, 'acceder'])->name('login.attempt');
 
 }); // Aquí se cierra el grupo de rutas para invitados.
-
 
 // ─────────────────────────────────────────────────────────────
 // GRUPO DE RUTAS PRIVADAS (solo para quien SÍ ha iniciado sesión)
@@ -131,19 +125,19 @@ Route::middleware('auth')->group(function () {
     // ─────────────────────────────────────────────────────────
     // VER el listado de alumnos (con buscador).
     Route::get('/alumnos', [AlumnosController::class, 'index'])
-    ->name('alumnos.index');
+        ->name('alumnos.index');
     // VER el formulario vacío para dar de alta un alumno.
     Route::get('/alumnos/crear', [AlumnosController::class, 'create'])
-    ->name('alumnos.create');
+        ->name('alumnos.create');
     // GUARDAR el alumno nuevo (POST = enviar datos nuevos).
     Route::post('/alumnos', [AlumnosController::class, 'store'])
-    ->name('alumnos.store');
+        ->name('alumnos.store');
     // VER la ficha de un alumno para modificarla.
     Route::get('/alumnos/{alumno}/editar', [AlumnosController::class,
-    'edit'])->name('alumnos.edit');
+        'edit'])->name('alumnos.edit');
     // GUARDAR los cambios de ese alumno (PUT = modificar).
     Route::put('/alumnos/{alumno}', [AlumnosController::class, 'update'])
-    ->name('alumnos.update');
+        ->name('alumnos.update');
 
     // RUTAS DE PROFESORES (SCRUM-228, 233, 237, 242, 246 y 250)
     Route::get('/profesores', [ProfesoresController::class, 'index'])
@@ -171,4 +165,12 @@ Route::middleware('auth')->group(function () {
     [DisponibilidadProfesoresController::class, 'destroy'])
     ->name('profesores.disponibilidad.destroy');
 
-}); // Aquí se cierra el grupo de rutas privadas. 
+    Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
+    Route::get('/usuarios/crear', [UsuariosController::class, 'create'])->name('usuarios.create');
+    Route::post('/usuarios', [UsuariosController::class, 'store'])->name('usuarios.store');
+    Route::get('/usuarios/{usuario}/editar', [UsuariosController::class, 'edit'])->name('usuarios.edit');
+    Route::put('/usuarios/{usuario}', [UsuariosController::class, 'update'])->name('usuarios.update');
+    Route::post('/usuarios/{usuario}/roles', [UsuarioRolController::class, 'store'])->name('usuarios.roles.store');
+    Route::put('/usuarios/{usuario}/roles/{usuarioRol}/cerrar', [UsuarioRolController::class, 'cerrar'])->name('usuarios.roles.cerrar');
+
+}); // Aquí se cierra el grupo de rutas privadas.

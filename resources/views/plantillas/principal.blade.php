@@ -57,6 +57,14 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                 <span class="nav-icon">⚙</span> Configuración
             </a>
 
+             {{-- NUEVO: sección de Administración del menú. --}}
+            <div class="nav-label">Administración</div>
+            <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
+                <span class="nav-icon">☺</span> Usuarios
+            </a>
+
+
+            
             {{-- NUEVO: sección de Alumnos y tutores del menú. --}}
             <div class="nav-label">Alumnos y tutores</div>
             {{-- Enlace al listado de alumnos. 'alumnos.*' lo marca en todas
