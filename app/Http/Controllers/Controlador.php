@@ -1,7 +1,15 @@
 <?php
+
+// Dirección del archivo: carpeta app/Http/Controllers.
 namespace App\Http\Controllers;
+
+// Pieza de Laravel que añade $this->authorize() a los controladores.
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 // Herramienta de Laravel para hacer consultas sencillas a la base de datos.
 use Illuminate\Support\Facades\DB;
+
+// Controlador base del proyecto: todos los controladores heredan de este ("extends Controlador").
+// Lo que se pone aquí lo pueden usar todos.
 abstract class Controlador
 {
 // Controlador base del proyecto.
