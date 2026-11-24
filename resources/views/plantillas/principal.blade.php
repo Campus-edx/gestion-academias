@@ -1,9 +1,9 @@
 {{-- Datos que usa toda la plantilla: usuario conectado, su empresa, nombre y color de la aplicación --}}
 @php
-    $usuarioAutenticado = auth()->user();
-    $empresa = $usuarioAutenticado->empresa;
-    $nombreAplicacion = $empresa?->nombre_aplicacion ?: config('app.name');
-    $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
+$usuarioAutenticado = auth()->user();
+$empresa = $usuarioAutenticado->empresa;
+$nombreAplicacion = $empresa?->nombre_aplicacion ?: config('app.name');
+$colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
 @endphp
 <!doctype html>
 <html lang="es">
@@ -20,7 +20,13 @@
     {{-- Color principal de la empresa --}}
     <style>
         :root {
-            --primary: {{ $colorPrincipal }};
+            --primary: {
+                    {
+                    $colorPrincipal
+                }
+            }
+
+            ;
         }
     </style>
 </head>
@@ -40,7 +46,7 @@
                 </div>
             </div>
 
-                        {{-- Enlaces del menú: Inicio y Configuración  --}}
+            {{-- Enlaces del menú: Inicio y Configuración  --}}
             <div class="nav-label">Principal</div>
             <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                 <span class="nav-icon">⌂</span> Inicio
@@ -50,25 +56,32 @@
                 href="{{ route('settings.profile') }}">
                 <span class="nav-icon">⚙</span> Configuración
             </a>
-            
+
             {{-- NUEVO: sección de Alumnos y tutores del menú. --}}
             <div class="nav-label">Alumnos y tutores</div>
             {{-- Enlace al listado de alumnos. 'alumnos.*' lo marca en todas
             sus pantallas. --}}
             <a class="nav-link {{ request()->routeIs('alumnos.*') ? 'active'
             : '' }}" href="{{ route('alumnos.index') }}">
-            <span class="nav-icon">☺</span> Alumnos
+                <span class="nav-icon">☺</span> Alumnos
             </a>
 
             {{-- NUEVO: sección de Profesorado del menú. --}}
             <div class="nav-label">Profesorado</div>
-                <a class="nav-link {{ request()->routeIs('profesores.*') ?
+            <a class="nav-link {{ request()->routeIs('profesores.*') ?
                 'active' : '' }}" href="{{ route('profesores.index') }}">
                 <span class="nav-icon">✎</span> Profesores
-                </a>
+            </a>
+
+            {{-- Sección de Grupos --}}
+            <div class="nav-label">Grupos</div>
+            <a class="nav-link {{ request()->routeIs('grupos.*') ? 'active' : '' }}"
+                href="{{ route('grupos.index') }}">
+                <span class="nav-icon">▣</span> Grupos
+            </a>
 
 
-            
+
 
             {{-- Parte de abajo del menú: datos del usuario conectado y botón de cerrar sesión --}}
             <div class="sidebar-bottom">
@@ -94,7 +107,7 @@
             <header class="topbar">
                 <div class="topbar-title">@yield('topbar', 'Inicio')</div>
                 @if ($empresa)
-                    <div class="topbar-company">{{ $empresa->nombre_comercial ?: $empresa->razon_social }}</div>
+                <div class="topbar-company">{{ $empresa->nombre_comercial ?: $empresa->razon_social }}</div>
                 @endif
             </header>
 
