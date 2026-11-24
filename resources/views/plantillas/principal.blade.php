@@ -15,8 +15,8 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- Título de la pestaña: el de cada pantalla + nombre de la aplicación --}}
     <title>@yield('title', 'Panel') · {{ $nombreAplicacion }}</title>
-    {{-- Hoja de estilos del proyecto (public/css/app.css) --}}
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    {{-- Hoja de estilos del proyecto (public/css/app.css) con versión automática para evitar caché --}}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     {{-- Color principal de la empresa --}}
     <style>
         :root {
@@ -86,6 +86,13 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
             <a class="nav-link {{ request()->routeIs('grupos.*') ? 'active' : '' }}"
                 href="{{ route('grupos.index') }}">
                 <span class="nav-icon">▣</span> Grupos
+            </a>
+
+            {{-- Sección de Temporadas --}}
+            <div class="nav-label">Temporadas</div>
+            <a class="nav-link {{ request()->routeIs('temporadas.*') ? 'active' : '' }}"
+                href="{{ route('temporadas.index') }}">
+                <span class="nav-icon">▦</span> Temporadas
             </a>
 
 
