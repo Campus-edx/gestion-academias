@@ -18,17 +18,11 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
     {{-- Hoja de estilos del proyecto (public/css/app.css) con versión automática para evitar caché --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     {{-- Color principal de la empresa --}}
-    <style>
-        :root {
-            --primary: {
-                    {
-                    $colorPrincipal
-                }
-            }
-
-            ;
-        }
-    </style>
+   <style>
+    :root {
+        --primary: {{ $colorPrincipal }};
+    }
+</style>
 </head>
 
 <body>
@@ -80,6 +74,23 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                 'active' : '' }}" href="{{ route('profesores.index') }}">
                 <span class="nav-icon">✎</span> Profesores
             </a>
+
+            {{-- NUEVO: sección de Oferta formativa del menú. --}}
+            <div class="nav-label">Oferta formativa</div>
+
+            <a class="nav-link {{ request()->routeIs('cursos.*') ? 'active' : '' }}" href="{{ route('cursos.index') }}">
+                <span class="nav-icon">▤</span> Cursos
+            </a>
+            <a class="nav-link {{ request()->routeIs('modulos.*') ? 'active' : '' }}" href="{{ route('modulos.index') }}">
+                <span class="nav-icon">▦</span> Módulos
+            </a>
+            <a class="nav-link {{ request()->routeIs('categorias_curso.*') ? 'active' : '' }}" href="{{ route('categorias_curso.index') }}">
+                <span class="nav-icon">◆</span> Categorías de curso
+            </a>
+            <a class="nav-link {{ request()->routeIs('materias.*') ? 'active' : '' }}" href="{{ route('materias.index') }}">
+                <span class="nav-icon">✎</span> Materias
+            </a>
+
 
             {{-- Sección de Grupos --}}
             <div class="nav-label">Grupos</div>
