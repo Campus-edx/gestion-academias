@@ -1,48 +1,77 @@
 <?php
+
 namespace App\Models;
+
+use App\Models\Contactos\EntidadesDirecciones;
+use App\Models\Contactos\EntidadesCorreos;
+use App\Models\Contactos\EntidadesTelefonos;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-// Modelo Personas: datos personales de CUALQUIER persona (alumno, tutor,
-// profesor...).
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Personas extends Model
 {
-// Nombre de la tabla (lo escribimos siempre, como pide la guía).
-protected $table = 'personas';
-// Campos que se pueden rellenar de golpe con create() o update().
-protected $fillable = [
-'nombre',
-'apellidos',
-'tipo_documento', // dni, nie o pasaporte (puede ir vacío).
-'numero_documento', // Va junto con el tipo: los dos rellenos o los dos vacíos.
-'fecha_nacimiento',
-'correo_electronico',
-'telefono',
-'persona_id_created', // Quién creó el registro (id de usuario_rol).
-'persona_id_updated', // Quién lo modificó por última vez.
-];
-// La fecha de nacimiento se lee como fecha: se puede escribir -
-// >format('d/m/Y').
-protected function casts(): array
-{
-return [
-'fecha_nacimiento' => 'date',
-];
-}
-// Una persona puede ser alumno (como mucho una vez): $persona->alumno.
-public function alumno(): HasOne
-{
-return $this->hasOne(Alumnos::class, 'persona_id');
-}
-// Nombre completo: $persona->nombreCompleto()
-public function nombreCompleto(): string
-{
-return trim($this->nombre . ' ' . $this->apellidos);
-}
-// Relación: una persona puede ser profesor (como mucho una vez).
-// Permite escribir $persona->profesor (o null si no lo es).
-public function profesor(): HasOne
-{
-return $this->hasOne(Profesores::class, 'persona_id');
-}
+    // Nombre de la tabla.
+    protected $table = 'personas';
 
+    // Campos que se pueden rellenar mediante create() o update().
+    protected $fillable = [
+        'nombre',
+        'apellidos',
+        'tipo_documento',
+        'numero_documento',
+        'fecha_nacimiento',
+        'correo_electronico',
+        'telefono',
+        'persona_id_created',
+        'persona_id_updated',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'fecha_nacimiento' => 'date',
+        ];
+    }
+
+    // Una persona puede ser alumno.
+    public function alumno(): HasOne
+    {
+        return $this->hasOne(Alumnos::class, 'persona_id');
+    }
+
+    // Una persona puede ser profesor.
+    public function profesor(): HasOne
+    {
+        return $this->hasOne(Profesores::class, 'persona_id');
+    }
+        // Una persona puede ser tutor (como mucho una vez): $persona->tutor.
+    public function tutor(): HasOne
+    {
+        return $this->hasOne(Tutores::class, 'persona_id');
+    }
+
+    // Una persona puede tener varias direcciones.
+    public function direcciones(): HasMany
+    {
+        return $this->hasMany(EntidadesDirecciones::class, 'persona_id');
+    }
+
+    // Una persona puede tener varios correos electrónicos.
+    public function correos(): HasMany
+    {
+        return $this->hasMany(EntidadesCorreos::class, 'persona_id');
+    }
+
+    // Una persona puede tener varios teléfonos.
+    public function telefonos(): HasMany
+    {
+        return $this->hasMany(EntidadesTelefonos::class, 'persona_id');
+    }
+
+    // Nombre completo.
+    public function nombreCompleto(): string
+    {
+        return trim($this->nombre . ' ' . $this->apellidos);
+    }
 }

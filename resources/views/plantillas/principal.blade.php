@@ -15,20 +15,14 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- Título de la pestaña: el de cada pantalla + nombre de la aplicación --}}
     <title>@yield('title', 'Panel') · {{ $nombreAplicacion }}</title>
-    {{-- Hoja de estilos del proyecto (public/css/app.css) --}}
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    {{-- Hoja de estilos del proyecto (public/css/app.css) con versión automática para evitar caché --}}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     {{-- Color principal de la empresa --}}
-    <style>
-        :root {
-            --primary: {
-                    {
-                    $colorPrincipal
-                }
-            }
-
-            ;
-        }
-    </style>
+   <style>
+    :root {
+        --primary: {{ $colorPrincipal }};
+    }
+</style>
 </head>
 
 <body>
@@ -57,32 +51,8 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                 <span class="nav-icon">⚙</span> Configuración
             </a>
 
-             {{-- NUEVO: sección de Administración del menú. --}}
-            {{-- <div class="nav-label">Administración</div>
-            <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
-                <span class="nav-icon">☺</span> Usuarios
-            </a> --}}
-
-            {{-- SUSTITUYE la sección "Administración" anterior comentada arriba ^^ 
-               Añade "Organización" y "Empresas" delante de "Usuarios". --}}
-
-            {{-- Sección de Administración del menú. Solo sale si se puede ver alguno de sus enlaces. --}}
-            @canany(['usuarios.ver', 'permisos.editar'])
-                <div class="nav-label">Administración</div>
-            @endcanany
-            @can('usuarios.ver')
-                <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
-                    <span class="nav-icon">☺</span> Usuarios
-                </a>
-            @endcan
-            @can('permisos.editar')
-                <a class="nav-link {{ request()->routeIs('permisos.*') ? 'active' : '' }}" href="{{ route('permisos.index') }}">
-                    <span class="nav-icon">✔</span> Permisos
-                </a>
-            @endcan
-            
-            
-            @canany(['empresas.ver', 'usuarios.ver', 'permisos.editar'])
+              {{-- Sección de Administración del menú. --}}
+            @canany(['empresas.ver', 'empresas.editar', 'usuarios.ver', 'permisos.editar'])
                 <div class="nav-label">Administración</div>
             @endcanany
             @can('empresas.editar')
@@ -95,24 +65,16 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                     <span class="nav-icon">▦</span> Empresas
                 </a>
             @endcan
-           
-            {{-- Comentado por Jorge AV repite el segundo @can   
-           
-           @can('usuarios.ver')
+            @can('usuarios.ver')
                 <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
                     <span class="nav-icon">☺</span> Usuarios
                 </a>
             @endcan
-            
-            --}}
-{{-- 
-@can('permisos.editar')
-    <a class="nav-link {{ request()->routeIs('permisos.*') ? 'active' : '' }}" href="{{ route('permisos.index') }}">
-        <span class="nav-icon">✔</span> Permisos
-    </a>
-@endcan
---}}
-
+            @can('permisos.editar')
+                <a class="nav-link {{ request()->routeIs('permisos.*') ? 'active' : '' }}" href="{{ route('permisos.index') }}">
+                    <span class="nav-icon">✔</span> Permisos
+                </a>
+            @endcan
 
 
             
@@ -124,6 +86,11 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
             : '' }}" href="{{ route('alumnos.index') }}">
                 <span class="nav-icon">☺</span> Alumnos
             </a>
+            
+            {{-- NUEVO: enlace al listado de tutores. --}}
+            <a class="nav-link {{ request()->routeIs('tutores.*') ? 'active' : '' }}" href="{{ route('tutores.index') }}">
+                <span class="nav-icon">♥</span> Tutores
+            </a>
 
             {{-- NUEVO: sección de Profesorado del menú. --}}
             <div class="nav-label">Profesorado</div>
@@ -132,11 +99,35 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                 <span class="nav-icon">✎</span> Profesores
             </a>
 
+            {{-- NUEVO: sección de Oferta formativa del menú. --}}
+            <div class="nav-label">Oferta formativa</div>
+
+            <a class="nav-link {{ request()->routeIs('cursos.*') ? 'active' : '' }}" href="{{ route('cursos.index') }}">
+                <span class="nav-icon">▤</span> Cursos
+            </a>
+            <a class="nav-link {{ request()->routeIs('modulos.*') ? 'active' : '' }}" href="{{ route('modulos.index') }}">
+                <span class="nav-icon">▦</span> Módulos
+            </a>
+            <a class="nav-link {{ request()->routeIs('categorias_curso.*') ? 'active' : '' }}" href="{{ route('categorias_curso.index') }}">
+                <span class="nav-icon">◆</span> Categorías de curso
+            </a>
+            <a class="nav-link {{ request()->routeIs('materias.*') ? 'active' : '' }}" href="{{ route('materias.index') }}">
+                <span class="nav-icon">✎</span> Materias
+            </a>
+
+
             {{-- Sección de Grupos --}}
             <div class="nav-label">Grupos</div>
             <a class="nav-link {{ request()->routeIs('grupos.*') ? 'active' : '' }}"
                 href="{{ route('grupos.index') }}">
                 <span class="nav-icon">▣</span> Grupos
+            </a>
+
+            {{-- Sección de Temporadas --}}
+            <div class="nav-label">Temporadas</div>
+            <a class="nav-link {{ request()->routeIs('temporadas.*') ? 'active' : '' }}"
+                href="{{ route('temporadas.index') }}">
+                <span class="nav-icon">▦</span> Temporadas
             </a>
 
 

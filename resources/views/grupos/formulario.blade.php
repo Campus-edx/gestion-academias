@@ -1,3 +1,4 @@
+
 @extends('plantillas.principal')
 
 @section('title', $modoEdicion ? 'Editar grupo' : 'Nuevo grupo')
@@ -27,7 +28,7 @@
             @csrf
 
             @if($modoEdicion)
-            @method('PUT')
+                @method('PUT')
             @endif
 
             <div class="form-grid">
@@ -46,18 +47,18 @@
                         <option value="">Seleccionar temporada</option>
 
                         @foreach($temporadas as $temporada)
-                        <option value="{{ $temporada->id }}"
-                            @selected(old('temporada_id', $grupo->temporada_id ?? '') == $temporada->id)>
-                            {{ $temporada->nombre }}
-                            ({{ \Carbon\Carbon::parse($temporada->fecha_inicio)->format('d/m/Y') }}
-                            - {{ \Carbon\Carbon::parse($temporada->fecha_fin)->format('d/m/Y') }})
-                        </option>
+                            <option value="{{ $temporada->id }}"
+                                @selected(old('temporada_id', $grupo->temporada_id ?? '') == $temporada->id)>
+                                {{ $temporada->nombre }}
+                                ({{ \Carbon\Carbon::parse($temporada->fecha_inicio)->format('d/m/Y') }}
+                                - {{ \Carbon\Carbon::parse($temporada->fecha_fin)->format('d/m/Y') }})
+                            </option>
                         @endforeach
 
                     </select>
 
                     @error('temporada_id')
-                    <div class="form-error">{{ $message }}</div>
+                        <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -78,7 +79,7 @@
                     </select>
 
                     @error('curso_id')
-                    <div class="form-error">{{ $message }}</div>
+                        <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -99,7 +100,7 @@
                     </select>
 
                     @error('centro_id')
-                    <div class="form-error">{{ $message }}</div>
+                        <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -119,7 +120,7 @@
                     </select>
 
                     @error('plataforma_id')
-                    <div class="form-error">{{ $message }}</div>
+                        <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -139,7 +140,7 @@
                         required>
 
                     @error('nombre')
-                    <div class="form-error">{{ $message }}</div>
+                        <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -160,7 +161,7 @@
                         required>
 
                     @error('capacidad_maxima')
-                    <div class="form-error">{{ $message }}</div>
+                        <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -176,31 +177,31 @@
                         required>
 
                         @foreach([
-                        'planificado' => 'Planificado',
-                        'abierto' => 'Abierto',
-                        'en_curso' => 'En curso',
-                        'finalizado' => 'Finalizado',
-                        'cancelado' => 'Cancelado'
+                            'planificado' => 'Planificado',
+                            'abierto' => 'Abierto',
+                            'en_curso' => 'En curso',
+                            'finalizado' => 'Finalizado',
+                            'cancelado' => 'Cancelado'
                         ] as $valor => $texto)
 
-                        <option value="{{ $valor }}"
-                            @selected(old('estado', $grupo->estado ?? 'planificado') == $valor)>
-                            {{ $texto }}
-                        </option>
+                            <option value="{{ $valor }}"
+                                @selected(old('estado', $grupo->estado ?? 'planificado') == $valor)>
+                                {{ $texto }}
+                            </option>
 
                         @endforeach
 
                     </select>
 
                     @error('estado')
-                    <div class="form-error">{{ $message }}</div>
+                        <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
 
             </div>
 
             {{-- Botones --}}
-            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+            <div class="form-actions">
 
                 <a href="{{ route('grupos.index') }}" class="btn btn-secondary">
                     Cancelar
@@ -209,11 +210,8 @@
                 <button type="submit"
                     id="guardarGrupo"
                     class="btn btn-primary"
-                    style="background:#9ca3af; color:#ffffff; padding:10px 18px; border:none; opacity:0.65; cursor:not-allowed;"
                     disabled>
-
                     {{ $modoEdicion ? 'Guardar cambios' : 'Guardar grupo' }}
-
                 </button>
 
             </div>
@@ -235,9 +233,9 @@
         const urlOpciones = @json(route('grupos.opciones', ['temporadaId' => '__TEMPORADA__']));
 
         // Valores que deben recuperarse al editar o tras un error de validación.
-        const cursoSeleccionado = @json(old('curso_id', $grupo - > curso_id ?? ''));
-        const centroSeleccionado = @json(old('centro_id', $grupo - > centro_id ?? ''));
-        const plataformaSeleccionada = @json(old('plataforma_id', $grupo - > plataforma_id ?? ''));
+        const cursoSeleccionado = @json(old('curso_id', $grupo->curso_id ?? ''));
+        const centroSeleccionado = @json(old('centro_id', $grupo->centro_id ?? ''));
+        const plataformaSeleccionada = @json(old('plataforma_id', $grupo->plataforma_id ?? ''));
 
         // Limpiar un desplegable y mostrar un mensaje.
         function limpiarSelect(select, texto, deshabilitar = true) {
@@ -246,25 +244,10 @@
             select.disabled = deshabilitar;
         }
 
-        // Cambiar el aspecto del botón según su disponibilidad.
-        function actualizarBoton() {
-
-            if (guardarGrupo.disabled) {
-                guardarGrupo.style.background = '#9ca3af';
-                guardarGrupo.style.opacity = '0.65';
-                guardarGrupo.style.cursor = 'not-allowed';
-            } else {
-                guardarGrupo.style.background = '#16a34a';
-                guardarGrupo.style.opacity = '1';
-                guardarGrupo.style.cursor = 'pointer';
-            }
-        }
-
         // Cargar cursos, centros y plataformas de la temporada.
         async function cargarOpciones(restaurarValores = false) {
 
             guardarGrupo.disabled = true;
-            actualizarBoton();
 
             limpiarSelect(curso, 'Cargando cursos...');
             limpiarSelect(centro, 'Cargando centros...');
@@ -329,8 +312,6 @@
                 guardarGrupo.disabled =
                     datos.cursos.length === 0 || datos.centros.length === 0;
 
-                actualizarBoton();
-
             } catch (error) {
 
                 limpiarSelect(curso, 'Error al cargar cursos');
@@ -338,7 +319,6 @@
                 limpiarSelect(plataforma, 'Sin plataforma');
 
                 guardarGrupo.disabled = true;
-                actualizarBoton();
 
                 console.error(error);
 
@@ -355,8 +335,6 @@
         // Esto ocurre al abrir un grupo para editarlo.
         if (temporada.value) {
             cargarOpciones(true);
-        } else {
-            actualizarBoton();
         }
 
     });
