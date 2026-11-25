@@ -146,8 +146,7 @@ class AlumnosController extends Controlador
             // MAS ADELANTE , EL USE DEL MODELO DE INCRIPCIONES HAY QUE DESCOMENTARLO
         //--------OJO POR OJO, DIENTE POR DIENTE-----
 
-            // NUEVO (capítulo de tutores): sus tutores, con persona y parentesco, para la tarjeta "Tutores".
-            // 'tutoresDelAlumno' => $alumno->tutoresDelAlumno()->with(['tutor.persona', 'parentesco'])->get(),
+            'tutoresDelAlumno' => $alumno->tutoresDelAlumno()->with(['tutor.persona', 'parentesco'])->get(),
             // NUEVO (capítulo de inscripciones): sus matrículas en grupos de la empresa del usuario.
             // 'inscripciones' => Inscripciones::historial()
             //     ->where('i.alumno_id', $alumno->id)

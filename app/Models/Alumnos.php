@@ -2,6 +2,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 // Modelo Alumnos: lo propio de ser alumno. Su nombre y documento están en su persona.
 class Alumnos extends Model
 {
@@ -24,4 +25,10 @@ public function persona(): BelongsTo
 {
 return $this->belongsTo(Personas::class, 'persona_id');
 }
+// En Alumnos.php: sus tutores, con parentesco y permisos.
+public function tutoresDelAlumno(): HasMany
+{
+return $this->hasMany(TutorAlumno::class, 'alumno_id');
+}
+
 }

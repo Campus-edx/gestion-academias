@@ -67,6 +67,11 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
             : '' }}" href="{{ route('alumnos.index') }}">
                 <span class="nav-icon">☺</span> Alumnos
             </a>
+            
+            {{-- NUEVO: enlace al listado de tutores. --}}
+            <a class="nav-link {{ request()->routeIs('tutores.*') ? 'active' : '' }}" href="{{ route('tutores.index') }}">
+                <span class="nav-icon">♥</span> Tutores
+            </a>
 
             {{-- NUEVO: sección de Profesorado del menú. --}}
             <div class="nav-label">Profesorado</div>

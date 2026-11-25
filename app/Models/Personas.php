@@ -44,5 +44,10 @@ public function profesor(): HasOne
 {
 return $this->hasOne(Profesores::class, 'persona_id');
 }
+// En Personas.php: una persona puede ser tutor.
+public function tutor(): HasOne
+{
+return $this->hasOne(Tutores::class, 'persona_id');
+}
 
 }
