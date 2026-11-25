@@ -58,10 +58,61 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
             </a>
 
              {{-- NUEVO: sección de Administración del menú. --}}
-            <div class="nav-label">Administración</div>
+            {{-- <div class="nav-label">Administración</div>
             <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
                 <span class="nav-icon">☺</span> Usuarios
-            </a>
+            </a> --}}
+
+            {{-- SUSTITUYE la sección "Administración" anterior comentada arriba ^^ 
+               Añade "Organización" y "Empresas" delante de "Usuarios". --}}
+
+            {{-- Sección de Administración del menú. Solo sale si se puede ver alguno de sus enlaces. --}}
+            @canany(['usuarios.ver', 'permisos.editar'])
+                <div class="nav-label">Administración</div>
+            @endcanany
+            @can('usuarios.ver')
+                <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
+                    <span class="nav-icon">☺</span> Usuarios
+                </a>
+            @endcan
+            @can('permisos.editar')
+                <a class="nav-link {{ request()->routeIs('permisos.*') ? 'active' : '' }}" href="{{ route('permisos.index') }}">
+                    <span class="nav-icon">✔</span> Permisos
+                </a>
+            @endcan
+            
+            
+            @canany(['empresas.ver', 'usuarios.ver', 'permisos.editar'])
+                <div class="nav-label">Administración</div>
+            @endcanany
+            @can('empresas.editar')
+                <a class="nav-link {{ request()->routeIs('organizacion.*') ? 'active' : '' }}" href="{{ route('organizacion.edit') }}">
+                    <span class="nav-icon">◎</span> Organización
+                </a>
+            @endcan
+            @can('empresas.ver')
+                <a class="nav-link {{ request()->routeIs('empresas.*') ? 'active' : '' }}" href="{{ route('empresas.index') }}">
+                    <span class="nav-icon">▦</span> Empresas
+                </a>
+            @endcan
+           
+            {{-- Comentado por Jorge AV repite el segundo @can   
+           
+           @can('usuarios.ver')
+                <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
+                    <span class="nav-icon">☺</span> Usuarios
+                </a>
+            @endcan
+            
+            --}}
+{{-- 
+@can('permisos.editar')
+    <a class="nav-link {{ request()->routeIs('permisos.*') ? 'active' : '' }}" href="{{ route('permisos.index') }}">
+        <span class="nav-icon">✔</span> Permisos
+    </a>
+@endcan
+--}}
+
 
 
             
