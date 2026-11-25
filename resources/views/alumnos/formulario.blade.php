@@ -111,13 +111,11 @@
     </div>
 </div>
 
-{{-------OJO AL DATO------
-  PENDIENTE: quitar "false &&" al hacer Tutores e Inscripciones  
-  ------------OJO-------- }}
+
 
 {{-- NUEVO (capítulo de tutores): tarjeta con los tutores del alumno. Solo en la ficha (alumno ya guardado).
      Los tutores se asocian desde la ficha del tutor; aquí se ven y se enlaza a ellos. --}}
-@if(false && $alumno->exists)
+@if($alumno->exists)
 <div class="card" id="tutores">
     <div class="card-body">
         <div class="page-heading">
@@ -153,6 +151,10 @@
         </div>
     </div>
 </div>
+@endif
+
+{{-- PENDIENTE: quitar "false &&" en el capítulo de Inscripciones. --}}
+@if(false && $alumno->exists)
 
 {{-- NUEVO (capítulo de inscripciones): matrículas del alumno (SCRUM-273, 278 y 282). --}}
 <div class="card" id="inscripciones">

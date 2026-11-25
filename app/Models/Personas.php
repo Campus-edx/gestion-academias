@@ -45,6 +45,11 @@ class Personas extends Model
     {
         return $this->hasOne(Profesores::class, 'persona_id');
     }
+        // Una persona puede ser tutor (como mucho una vez): $persona->tutor.
+    public function tutor(): HasOne
+    {
+        return $this->hasOne(Tutores::class, 'persona_id');
+    }
 
     // Una persona puede tener varias direcciones.
     public function direcciones(): HasMany
