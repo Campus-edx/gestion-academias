@@ -76,6 +76,17 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                 </a>
             @endcan
 
+            {{-- Sección de Facturación. Solo para quien puede ver la facturación. --}}
+            @can('facturas.ver')
+                <div class="nav-label">Facturación</div>
+                <a class="nav-link {{ request()->routeIs('tarifas.*') ? 'active' : '' }}" href="{{ route('tarifas.index') }}">
+                    <span class="nav-icon">€</span> Tarifas
+                </a>
+                <a class="nav-link {{ request()->routeIs('descuentos.*') ? 'active' : '' }}" href="{{ route('descuentos.index') }}">
+                    <span class="nav-icon">%</span> Descuentos
+                </a>
+            @endcan
+
 
             
             {{-- NUEVO: sección de Alumnos y tutores del menú. --}}
