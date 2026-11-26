@@ -51,11 +51,30 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                 <span class="nav-icon">⚙</span> Configuración
             </a>
 
-             {{-- NUEVO: sección de Administración del menú. --}}
-            <div class="nav-label">Administración</div>
-            <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
-                <span class="nav-icon">☺</span> Usuarios
-            </a>
+              {{-- Sección de Administración del menú. --}}
+            @canany(['empresas.ver', 'empresas.editar', 'usuarios.ver', 'permisos.editar'])
+                <div class="nav-label">Administración</div>
+            @endcanany
+            @can('empresas.editar')
+                <a class="nav-link {{ request()->routeIs('organizacion.*') ? 'active' : '' }}" href="{{ route('organizacion.edit') }}">
+                    <span class="nav-icon">◎</span> Organización
+                </a>
+            @endcan
+            @can('empresas.ver')
+                <a class="nav-link {{ request()->routeIs('empresas.*') ? 'active' : '' }}" href="{{ route('empresas.index') }}">
+                    <span class="nav-icon">▦</span> Empresas
+                </a>
+            @endcan
+            @can('usuarios.ver')
+                <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
+                    <span class="nav-icon">☺</span> Usuarios
+                </a>
+            @endcan
+            @can('permisos.editar')
+                <a class="nav-link {{ request()->routeIs('permisos.*') ? 'active' : '' }}" href="{{ route('permisos.index') }}">
+                    <span class="nav-icon">✔</span> Permisos
+                </a>
+            @endcan
 
 
             

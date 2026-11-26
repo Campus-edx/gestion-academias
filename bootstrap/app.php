@@ -9,6 +9,8 @@ return Application::configure(basePath: dirname(__DIR__))
         web: __DIR__ . '/../routes/web.php',
        then: function () {
             require __DIR__ . '/../routes/grupos.php';
+            require __DIR__ . '/../routes/organizaciones.php';
+            require __DIR__ . '/../routes/permisos.php';
             require __DIR__ . '/../routes/temporadas.php';
             require __DIR__ . '/../routes/cursos.php';
             require __DIR__ . '/../routes/tutores.php';
