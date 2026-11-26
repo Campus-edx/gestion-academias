@@ -153,8 +153,7 @@
 </div>
 @endif
 
-{{-- PENDIENTE: quitar "false &&" en el capítulo de Inscripciones. --}}
-@if(false && $alumno->exists)
+@if($alumno->exists)
 
 {{-- NUEVO (capítulo de inscripciones): matrículas del alumno (SCRUM-273, 278 y 282). --}}
 <div class="card" id="inscripciones">
@@ -169,10 +168,10 @@
             @endif
         </div>
 
-        {{-- Errores del formulario de baja (saco "baja"). --}}
-        @if($errors->baja->any())
+        {{-- Errores de los botones de cada inscripción: baja, reactivar, deshacer baja y anular (saco "inscripciones"). --}}
+        @if($errors->inscripciones->any())
             <div class="alert alert-danger">
-                @foreach($errors->baja->all() as $error)<div>{{ $error }}</div>@endforeach
+                @foreach($errors->inscripciones->all() as $error)<div>{{ $error }}</div>@endforeach
             </div>
         @endif
 
@@ -183,7 +182,16 @@
                 </thead>
                 <tbody>
                     @forelse($inscripciones as $inscripcion)
-                        <tr>
+                        @php
+                            // ¿Es la última de este alumno en ese grupo (sin contar anuladas)? Solo la última se puede
+                            // reactivar o deshacer: si el alumno ya volvió, las viejas se quedan como historial.
+                            $esLaUltima = $inscripciones->where('grupo_id', $inscripcion->grupo_id)
+                                ->where('estado', '!=', 'anulada')
+                                ->where('id', '>', $inscripcion->id)
+                                ->isEmpty();
+                        @endphp
+                        {{-- Las anuladas salen más claras: no cuentan para nada. --}}
+                        <tr @if($inscripcion->estado === 'anulada') style="opacity:.55;" @endif>
                             <td>{{ $inscripcion->curso }} · {{ $inscripcion->grupo }}</td>
                             <td>{{ $inscripcion->centro }}</td>
                             <td>{{ $inscripcion->pagador_nombre }} {{ $inscripcion->pagador_apellidos }}</td>
@@ -195,12 +203,14 @@
                                     <span class="badge badge-success">Activa</span>
                                 @elseif($inscripcion->estado === 'baja')
                                     <span class="badge badge-muted">Baja</span>
+                                @elseif($inscripcion->estado === 'anulada')
+                                    <span class="badge badge-muted">Anulada</span>
                                 @else
                                     <span class="badge badge-primary">Finalizada</span>
                                 @endif
                             </td>
-                            {{-- Dar de baja: solo las activas. --}}
                             <td class="actions">
+                                {{-- ACTIVA: el alumno se va → "Dar de baja" (con la fecha). --}}
                                 @if($inscripcion->estado === 'activa')
                                     <form method="POST" action="{{ route('inscripciones.baja', $inscripcion->id) }}" style="display:inline;">
                                         @csrf
@@ -208,6 +218,38 @@
                                         <input class="form-control" type="date" name="fecha_baja" value="{{ now()->format('Y-m-d') }}" style="width:auto; display:inline-block;">
                                         <button class="btn btn-danger btn-sm" type="submit">Dar de baja</button>
                                     </form>
+                                @endif
+
+                                {{-- BAJA (solo la última y si el alumno está activo):
+                                     "Reactivar" = el alumno VUELVE (inscripción nueva desde la fecha de vuelta).
+                                     "Deshacer baja" = la baja fue un ERROR (la misma vuelve a activa). --}}
+                                @if($inscripcion->estado === 'baja' && $esLaUltima && $alumno->activo)
+                                    <form method="POST" action="{{ route('inscripciones.reactivar', $inscripcion->id) }}" style="display:inline;">
+                                        @csrf
+                                        <input class="form-control" type="date" name="fecha_alta" value="{{ now()->format('Y-m-d') }}" style="width:auto; display:inline-block;">
+                                        <button class="btn btn-primary btn-sm" type="submit">Reactivar</button>
+                                    </form>
+                                    <form method="POST" action="{{ route('inscripciones.deshacer-baja', $inscripcion->id) }}" style="display:inline;"
+                                          onsubmit="return confirm('¿La baja fue un error? La inscripción volverá a estar activa como si no se hubiera dado de baja.');">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-secondary btn-sm" type="submit">Deshacer baja</button>
+                                    </form>
+                                @endif
+
+                                {{-- ACTIVA o BAJA: la matrícula fue un ERROR → "Anular" (pide el motivo).
+                                     <details> es un desplegable de HTML: el formulario solo se ve al pulsar "Anular…". --}}
+                                @if(in_array($inscripcion->estado, ['activa', 'baja'], true))
+                                    <details style="display:inline-block;">
+                                        <summary class="btn btn-secondary btn-sm">Anular…</summary>
+                                        <form method="POST" action="{{ route('inscripciones.anular', $inscripcion->id) }}" style="margin-top:6px;"
+                                              onsubmit="return confirm('¿Anular esta matrícula? Es para matrículas hechas por error: dejará de contar para todo.');">
+                                            @csrf
+                                            @method('PUT')
+                                            <input class="form-control" type="text" name="motivo" maxlength="200" placeholder="Motivo (p. ej. grupo equivocado)" style="width:auto; display:inline-block;">
+                                            <button class="btn btn-danger btn-sm" type="submit">Anular matrícula</button>
+                                        </form>
+                                    </details>
                                 @endif
                             </td>
                         </tr>

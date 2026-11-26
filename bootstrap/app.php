@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
             require __DIR__ . '/../routes/temporadas.php';
             require __DIR__ . '/../routes/cursos.php';
             require __DIR__ . '/../routes/tutores.php';
+            require __DIR__ . '/../routes/inscripciones.php';
             require __DIR__ . '/../routes/tarifas.php';
         },
         commands: __DIR__ . '/../routes/console.php',
