@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 // Los dos modelos que usa esta pantalla.
 use App\Models\Alumnos;
-// use App\Models\Inscripciones; TAREA DE MAS ADELANTE, INSCRIPCIONES
+use App\Models\Inscripciones\Inscripciones; 
 use App\Models\Personas;
 // Piezas de Laravel: errores de la base de datos, respuestas, petición,
 // transacciones, reglas de validación y vistas.
@@ -141,17 +141,13 @@ class AlumnosController extends Controlador
             'alumno' => $alumno,
             'persona' => $alumno->persona,
 
-        // ------------OJO AL DATO-------- 
-            // TAREA: ALUMNOS ESTE FORMULARIO DEPENDE DE OTRO TAREA DE 
-            // MAS ADELANTE , EL USE DEL MODELO DE INCRIPCIONES HAY QUE DESCOMENTARLO
-        //--------OJO POR OJO, DIENTE POR DIENTE-----
 
             'tutoresDelAlumno' => $alumno->tutoresDelAlumno()->with(['tutor.persona', 'parentesco'])->get(),
-            // NUEVO (capítulo de inscripciones): sus matrículas en grupos de la empresa del usuario.
-            // 'inscripciones' => Inscripciones::historial()
-            //     ->where('i.alumno_id', $alumno->id)
-            //     ->where('e.id', auth()->user()->empresa_id)
-            //     ->get(),
+            // sus matrículas en grupos de la empresa del usuario.
+            'inscripciones' => Inscripciones::historial()
+                ->where('i.alumno_id', $alumno->id)
+                ->where('e.id', request()->user()->empresa_id)
+                ->get(),
         ]);
     }
 

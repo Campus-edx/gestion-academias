@@ -91,6 +91,13 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
             <a class="nav-link {{ request()->routeIs('tutores.*') ? 'active' : '' }}" href="{{ route('tutores.index') }}">
                 <span class="nav-icon">♥</span> Tutores
             </a>
+            
+
+            {{-- NUEVO: enlace al historial de inscripciones. --}}
+            <a class="nav-link {{ request()->routeIs('inscripciones.*') ? 'active' : '' }}" href="{{ route('inscripciones.index') }}">
+                <span class="nav-icon">✓</span> Inscripciones
+            </a>
+
 
             {{-- NUEVO: sección de Profesorado del menú. --}}
             <div class="nav-label">Profesorado</div>
