@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Grupos extends Model
 {
@@ -19,4 +20,9 @@ class Grupos extends Model
         'persona_id_created',
         'persona_id_updated',
     ];
+
+    public function centro(): BelongsTo
+    {
+        return $this->belongsTo(Centros::class, 'centro_id');
+    }
 }

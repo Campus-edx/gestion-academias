@@ -2,7 +2,9 @@
 
 namespace App\Models\Contactos;
 
+use App\Models\Geografias\Municipios;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Direcciones extends Model
@@ -25,6 +27,12 @@ class Direcciones extends Model
         return [
             'requiere_revision' => 'boolean',
         ];
+    }
+
+    // Una dirección pertenece a un municipio.
+    public function municipio(): BelongsTo
+    {
+        return $this->belongsTo(Municipios::class, 'municipio_id');
     }
 
     // Una dirección puede estar asociada a distintas entidades.
