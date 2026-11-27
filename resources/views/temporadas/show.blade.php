@@ -1,4 +1,3 @@
-
 @extends('plantillas.principal')
 
 @section('title', 'Ficha de temporada')
@@ -13,9 +12,11 @@
     </div>
 
     <div>
-        <a href="{{ route('temporadas.edit', $temporada->id) }}" class="btn btn-primary">
-            Editar
-        </a>
+        @if ($puedeEditar)
+            <a href="{{ route('temporadas.edit', $temporada->id) }}" class="btn btn-primary">
+                Editar
+            </a>
+        @endif
 
         <a href="{{ route('temporadas.index') }}" class="btn btn-secondary">
             Volver

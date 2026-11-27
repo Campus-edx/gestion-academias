@@ -21,6 +21,11 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/grupos', [GruposController::class, 'index'])
         ->name('grupos.index');
 
+    // Mostrar ficha de un grupo.
+    Route::get('/grupos/{id}', [GruposController::class, 'show'])
+        ->whereNumber('id')
+        ->name('grupos.show');
+
     // Mostrar el formulario de edición de un grupo.
     Route::get('/grupos/{id}/editar', [GruposController::class, 'edit'])
         ->name('grupos.edit');

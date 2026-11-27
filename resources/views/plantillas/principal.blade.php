@@ -18,11 +18,11 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
     {{-- Hoja de estilos del proyecto (public/css/app.css) con versión automática para evitar caché --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     {{-- Color principal de la empresa --}}
-   <style>
-    :root {
-        --primary: {{ $colorPrincipal }};
-    }
-</style>
+    <style>
+        :root {
+            --primary: {{ $colorPrincipal }};
+        }
+    </style>
 </head>
 
 <body>
@@ -51,29 +51,40 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                 <span class="nav-icon">⚙</span> Configuración
             </a>
 
-              {{-- Sección de Administración del menú. --}}
+            {{-- Sección de Administración del menú. --}}
             @canany(['empresas.ver', 'empresas.editar', 'usuarios.ver', 'permisos.editar'])
-                <div class="nav-label">Administración</div>
+            <div class="nav-label">Administración</div>
             @endcanany
+
             @can('empresas.editar')
-                <a class="nav-link {{ request()->routeIs('organizacion.*') ? 'active' : '' }}" href="{{ route('organizacion.edit') }}">
-                    <span class="nav-icon">◎</span> Organización
-                </a>
+            <a class="nav-link {{ request()->routeIs('organizacion.*') ? 'active' : '' }}" href="{{ route('organizacion.edit') }}">
+                <span class="nav-icon">◎</span> Organización
+            </a>
             @endcan
+
             @can('empresas.ver')
-                <a class="nav-link {{ request()->routeIs('empresas.*') ? 'active' : '' }}" href="{{ route('empresas.index') }}">
-                    <span class="nav-icon">▦</span> Empresas
-                </a>
+            <a class="nav-link {{ request()->routeIs('empresas.*') ? 'active' : '' }}" href="{{ route('empresas.index') }}">
+                <span class="nav-icon">▦</span> Empresas
+            </a>
             @endcan
+
             @can('usuarios.ver')
-                <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
-                    <span class="nav-icon">☺</span> Usuarios
-                </a>
+            <a class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}" href="{{ route('usuarios.index') }}">
+                <span class="nav-icon">☺</span> Usuarios
+            </a>
             @endcan
+
             @can('permisos.editar')
-                <a class="nav-link {{ request()->routeIs('permisos.*') ? 'active' : '' }}" href="{{ route('permisos.index') }}">
-                    <span class="nav-icon">✔</span> Permisos
-                </a>
+            <a class="nav-link {{ request()->routeIs('permisos.*') ? 'active' : '' }}" href="{{ route('permisos.index') }}">
+                <span class="nav-icon">✔</span> Permisos
+            </a>
+            @endcan
+
+            @can('centros.ver')
+            <a class="nav-link {{ request()->routeIs('contactos.centros.*') ? 'active' : '' }}"
+                href="{{ route('contactos.centros.index') }}">
+                <span class="nav-icon">⌂</span> Centros
+            </a>
             @endcan
 
             {{-- Sección de Facturación. Solo para quien puede ver la facturación. --}}
@@ -88,7 +99,6 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
             @endcan
 
 
-            
             {{-- NUEVO: sección de Alumnos y tutores del menú. --}}
             <div class="nav-label">Alumnos y tutores</div>
             {{-- Enlace al listado de alumnos. 'alumnos.*' lo marca en todas
@@ -97,7 +107,7 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
             : '' }}" href="{{ route('alumnos.index') }}">
                 <span class="nav-icon">☺</span> Alumnos
             </a>
-            
+
             {{-- NUEVO: enlace al listado de tutores. --}}
             <a class="nav-link {{ request()->routeIs('tutores.*') ? 'active' : '' }}" href="{{ route('tutores.index') }}">
                 <span class="nav-icon">♥</span> Tutores
@@ -147,7 +157,6 @@ $colorPrincipal = $empresa?->color_principal ?: '#0d6efd';
                 href="{{ route('temporadas.index') }}">
                 <span class="nav-icon">▦</span> Temporadas
             </a>
-
 
 
 

@@ -1,4 +1,3 @@
-
 @extends('plantillas.principal')
 
 @section('title', 'Grupos')
@@ -51,28 +50,46 @@
                 <tbody id="tablaGrupos">
 
                     @forelse($grupos as $grupo)
-                        <tr>
-                            <td>{{ $grupo->nombre }}</td>
-                            <td>{{ $grupo->curso_nombre }}</td>
-                            <td>{{ $grupo->centro_nombre }}</td>
-                            <td>{{ $grupo->temporada_nombre }}</td>
+                    <tr>
+                        <td>{{ $grupo->nombre }}</td>
+                        <td>{{ $grupo->curso_nombre }}</td>
+                        <td>
+                            <a href="{{ route('contactos.centros.show', $grupo->centro_id) }}">
+                                {{ $grupo->centro_nombre }}
+                            </a>
+                        </td>
+                        <td>{{ $grupo->temporada_nombre }}</td>
 
-                            <td>{{ \Carbon\Carbon::parse($grupo->fecha_inicio)->format('d/m/Y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($grupo->fecha_fin)->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($grupo->fecha_inicio)->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($grupo->fecha_fin)->format('d/m/Y') }}</td>
 
-                            <td>{{ $grupo->capacidad_maxima }}</td>
-                            <td>{{ ucfirst(str_replace('_', ' ', $grupo->estado)) }}</td>
+                        <td>{{ $grupo->capacidad_maxima }}</td>
+                        <td>{{ ucfirst(str_replace('_', ' ', $grupo->estado)) }}</td>
 
-                            <td>
-                                <span>Pendiente</span>
-                            </td>
-                        </tr>
+                        <td>
+                            <div class="form-actions">
+
+                                <a href="{{ route('grupos.show', $grupo->id) }}"
+                                    class="btn btn-secondary">
+                                    Ver
+                                </a>
+
+                                @if($gruposEditables[$grupo->id] ?? false)
+                                <a href="{{ route('grupos.edit', $grupo->id) }}"
+                                    class="btn btn-primary">
+                                    Editar
+                                </a>
+                                @endif
+
+                            </div>
+                        </td>
+                    </tr>
                     @empty
-                        <tr>
-                            <td colspan="9">
-                                No hay grupos registrados.
-                            </td>
-                        </tr>
+                    <tr>
+                        <td colspan="9">
+                            No hay grupos registrados.
+                        </td>
+                    </tr>
                     @endforelse
 
                 </tbody>
@@ -93,9 +110,9 @@
             const texto = this.value.toLowerCase();
 
             filas.forEach(fila => {
-                fila.style.display = fila.textContent.toLowerCase().includes(texto)
-                    ? ''
-                    : 'none';
+                fila.style.display = fila.textContent.toLowerCase().includes(texto) ?
+                    '' :
+                    'none';
             });
         });
 

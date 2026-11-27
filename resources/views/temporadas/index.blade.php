@@ -27,9 +27,11 @@
                     value="{{ $buscar }}">
             </form>
 
-            <a href="{{ route('temporadas.create') }}" class="btn btn-primary">
-                + Nueva temporada
-            </a>
+            @if ($puedeCrear)
+                <a href="{{ route('temporadas.create') }}" class="btn btn-primary">
+                    + Nueva temporada
+                </a>
+            @endif
 
         </div>
 
@@ -70,20 +72,22 @@
                                 Ver
                             </a>
 
-                            <a href="{{ route('temporadas.edit', $temporada->id) }}" class="btn btn-secondary">
-                                Editar
-                            </a>
+                            @if ($temporadasEditables[$temporada->id] ?? false)
+                                <a href="{{ route('temporadas.edit', $temporada->id) }}" class="btn btn-secondary">
+                                    Editar
+                                </a>
 
-                            <form action="{{ route('temporadas.destroy', $temporada->id) }}"
-                                method="POST"
-                                style="display: inline;">
-                                @csrf
-                                @method('DELETE')
+                                <form action="{{ route('temporadas.destroy', $temporada->id) }}"
+                                    method="POST"
+                                    style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
 
-                                <button type="submit" class="btn btn-secondary">
-                                    Eliminar
-                                </button>
-                            </form>
+                                    <button type="submit" class="btn btn-secondary">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                     @empty
